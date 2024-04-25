@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_fakestore_api_remove_and_undo/cubits/products/products_cubit.dart';
+import 'package:task_fakestore_api_remove_and_undo/data/models/product_response.dart';
+import 'package:task_fakestore_api_remove_and_undo/ui/presentation/home/widgets/card_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,15 +27,21 @@ class HomeScreen extends StatelessWidget {
         body: BlocConsumer<ProductsCubit, ProductsState>(
           listener: (context, state) {},
           builder: (_, state) {
+            log(state.runtimeType.toString());
             if (state is ProductsLoading) {
-              return const SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(),
+              return const Center(
+                child: SizedBox(
+                  height: 44,
+                  width: 44,
+                  child: CircularProgressIndicator(),
+                ),
               );
             } else if (state is ProductsSuccess) {
+              final products = state.products;
               return GridView.builder(
-                itemCount: 10,
+                shrinkWrap: true,
+                primary: false,
+                itemCount: products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 4,
@@ -39,7 +49,10 @@ class HomeScreen extends StatelessWidget {
                   mainAxisExtent: 300,
                 ),
                 itemBuilder: (_, int index) {
-                  return const Text("data");
+                  ProductResponse productResponse = products[index];
+                  return CardItem(
+                    product: productResponse,
+                  );
                 },
               );
             }

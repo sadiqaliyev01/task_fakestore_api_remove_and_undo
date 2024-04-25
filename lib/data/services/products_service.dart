@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:task_fakestore_api_remove_and_undo/constants/endpoints.dart';
 import 'package:task_fakestore_api_remove_and_undo/data/models/product_response.dart';
@@ -11,7 +10,7 @@ class ProductsService {
     final List data = response.data;
 
     if (response.statusCode == 200) {
-      data.map((e) => ProductResponse.fromJson(e)).toList();
+      return data.map((e) => ProductResponse.fromJson(e)).toList();
     }
     throw Exception();
   }
