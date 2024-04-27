@@ -1,13 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_fakestore_api_remove_and_undo/cubits/products/products_cubit.dart';
-import 'package:task_fakestore_api_remove_and_undo/data/models/product_response.dart';
-import 'package:task_fakestore_api_remove_and_undo/ui/presentation/home/widgets/card_item.dart';
+import 'package:task_fakestore_api_remove_and_undo/ui/presentation/home/widgets/product_grid_view.dart';
+import 'package:task_fakestore_api_remove_and_undo/ui/presentation/home/widgets/app_bar_delete_icon.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +15,14 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Fake Store"),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.restore_from_trash_sharp,
-              ),
-            ),
+          actions: const [
+            AppBarDeleteIcon(deletedProductsCount: "0"),
           ],
         ),
         body: BlocConsumer<ProductsCubit, ProductsState>(
           listener: (context, state) {},
           builder: (_, state) {
-            log(state.runtimeType.toString());
+            //log(state.runtimeType.toString());
             if (state is ProductsLoading) {
               return const Center(
                 child: SizedBox(
@@ -38,22 +33,11 @@ class HomeScreen extends StatelessWidget {
               );
             } else if (state is ProductsSuccess) {
               final products = state.products;
-              return GridView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: products.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
-                  mainAxisExtent: 300,
-                ),
-                itemBuilder: (_, int index) {
-                  ProductResponse productResponse = products[index];
-                  return CardItem(
-                    product: productResponse,
-                  );
+              return ProductGridView(
+                deleteItem: (id) {
+                  context.read<ProductsCubit>().removeProducts(id);
                 },
+                products: products,
               );
             }
             return const Text("Error");
