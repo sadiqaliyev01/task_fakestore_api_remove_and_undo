@@ -1,8 +1,4 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_fakestore_api_remove_and_undo/cubits/products/products_cubit.dart';
 import 'package:task_fakestore_api_remove_and_undo/ui/presentation/trash/widgets/deleted_products_grid_view.dart';
@@ -33,7 +29,7 @@ class TrashScreen extends StatelessWidget {
           builder: (context, state) {
             return DeletedProductGridView(
               deleteItemPermanently: (id) {
-                log("deleted id: $id");
+                // log("deleted id: $id");
                 cubit.removeProductPermanently(id);
               },
               products: cubit.deletedProducts,

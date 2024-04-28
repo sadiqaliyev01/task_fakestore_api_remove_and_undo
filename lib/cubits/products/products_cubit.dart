@@ -1,3 +1,4 @@
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_fakestore_api_remove_and_undo/data/models/product_response.dart';
 import 'package:task_fakestore_api_remove_and_undo/data/services/products_service.dart';
@@ -33,10 +34,10 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   void undoProducts(int id) {
-    final removedProduct =
-        deletedProducts.firstWhere((element) => element.id == id);
+    final removedProduct = deletedProducts.firstWhere((element) => element.id == id);
     deletedProducts.remove(removedProduct);
     products!.add(removedProduct);
+    products!.sort((a, b) => a.id!.compareTo(b.id!));
     emit(ProductsSuccess(products!));
   }
 
@@ -46,9 +47,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   void removeProductPermanently(int id) {
-    products!.removeWhere((element) {
+    deletedProducts.removeWhere((element) {
       if (element.id == id) {
-        deletedProducts.clear();
+        // log('deleted: $id');
         return true;
       }
       return false;
